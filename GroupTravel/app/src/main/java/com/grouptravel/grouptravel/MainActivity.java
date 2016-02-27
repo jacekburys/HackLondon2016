@@ -12,26 +12,42 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
     private TextView textView;
     private LoginButton loginButton;
+    private Button showButton;
     private CallbackManager callbackManager;
 
 
@@ -41,6 +57,7 @@ public class MainActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
+        /*
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.grouptravel.grouptravel",
@@ -55,11 +72,13 @@ public class MainActivity extends Activity {
         } catch (NoSuchAlgorithmException e) {
 
         }
+        */
 
 
         setContentView(R.layout.activity_main);
         textView = (TextView)findViewById(R.id.textView);
         loginButton = (LoginButton)findViewById(R.id.loginButton);
+        showButton = (Button)findViewById(R.id.button);
         loginButton.setReadPermissions("user_friends");
 
         callbackManager = CallbackManager.Factory.create();
@@ -104,6 +123,13 @@ public class MainActivity extends Activity {
                 Log.d("Debug", "error");
             }
         });
+
+        showButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFriends();
+            }
+        });
     }
 
     @Override
@@ -126,4 +152,49 @@ public class MainActivity extends Activity {
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
     }
+
+    private void showFriends(){
+
+        //final List<Friend> friends = new ArrayList<>();
+        final ArrayList<String> friends_names = new ArrayList<>();
+        final ArrayList<String> friends_ids = new ArrayList<>();
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/friends",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        try{
+                            JSONArray arr = response.getJSONObject().getJSONArray("data");
+                            for(int i=0; i<arr.length(); i++) {
+                                JSONObject obj = arr.getJSONObject(i);
+                                Log.d("friend", obj.toString());
+                                String name = obj.get("name").toString();
+                                String id = obj.get("id").toString();
+                                Log.d("friend added", name + " - - " + id);
+                                //Friend friend = new Friend(name, id);
+                                //friends.add(friend);
+                                friends_names.add(name);
+                                friends_ids.add(id);
+                            }
+
+                        } catch(JSONException e){
+
+                        }
+
+                        Intent i = new Intent(getApplicationContext(), Next.class);
+                        i.putStringArrayListExtra("friends_names", friends_names);
+                        i.putStringArrayListExtra("friends_ids", friends_ids);
+                        startActivity(i);
+
+                    }
+                }
+        ).executeAsync();
+
+
+    }
+
 }
+
