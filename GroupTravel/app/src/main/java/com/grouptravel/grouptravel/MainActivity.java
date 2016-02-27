@@ -1,17 +1,20 @@
+
 package com.grouptravel.grouptravel;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity implements DateRangePickerFragment.OnDateRangeSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DateRangePickerFragment dateRangePickerFragment= DateRangePickerFragment.newInstance(MainActivity.this,false);
+        dateRangePickerFragment.show(getSupportFragmentManager(),"datePicker");
     }
 
     @Override
@@ -34,5 +37,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
+
+        // replace with the call to the server
+        Log.d("range : ","from: "+startDay+"-"+startMonth+"-"+startYear+" to : "+endDay+"-"+endMonth+"-"+endYear );
     }
 }
