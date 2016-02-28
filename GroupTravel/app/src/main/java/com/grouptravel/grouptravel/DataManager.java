@@ -257,7 +257,7 @@ public class DataManager {
 
                         }
 
-                        friendsFragment.updateIntersection(start + " - " + end);
+                        friendsFragment.updateIntersection("You are all free on:\n" + start + " - " + end);
                     }
                 }, new Response.ErrorListener() {
             @Override

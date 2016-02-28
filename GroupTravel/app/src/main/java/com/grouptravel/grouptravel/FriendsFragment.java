@@ -141,10 +141,12 @@ public class FriendsFragment extends Fragment {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         Friend friend = (Friend) cb.getTag();
+                        /*
                         Toast.makeText(getContext().getApplicationContext(),
                                 "Clicked on Checkbox: " + cb.getText() +
                                         " is " + cb.isChecked(),
                                 Toast.LENGTH_LONG).show();
+                                */
                         friend.setSelected(cb.isChecked());
                         DataManager.getInstance().getIntersection();
                     }

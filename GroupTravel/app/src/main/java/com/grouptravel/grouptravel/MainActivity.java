@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 
+import com.facebook.login.LoginManager;
+
 public class MainActivity extends ActionBarActivity {
 
     ActionBar.Tab Tab1, Tab2, Tab3;
@@ -55,7 +57,11 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LoginManager.getInstance().logOut();
+    }
 
     ///////////////////////
 

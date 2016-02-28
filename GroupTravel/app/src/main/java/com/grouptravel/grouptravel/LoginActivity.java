@@ -139,6 +139,8 @@ public class LoginActivity extends Activity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
