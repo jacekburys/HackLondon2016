@@ -12,9 +12,9 @@ import android.view.Window;
 public class MainActivity extends ActionBarActivity {
 
     ActionBar.Tab Tab1, Tab2, Tab3;
-    Fragment fragmentTab1 = new CalendarFragment();
-    Fragment fragmentTab2 = new FriendsFragment();
-    Fragment fragmentTab3 = new TravelFragment();
+    CalendarFragment calendarFragment = new CalendarFragment();
+    FriendsFragment friendsFragment = new FriendsFragment();
+    TravelFragment travelFragment = new TravelFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +42,16 @@ public class MainActivity extends ActionBarActivity {
         Tab3 = actionBar.newTab().setText("Where?");
 
         // Set Tab Listeners
-        Tab1.setTabListener(new TabListener(fragmentTab1));
-        Tab2.setTabListener(new TabListener(fragmentTab2));
-        Tab3.setTabListener(new TabListener(fragmentTab3));
+        Tab1.setTabListener(new TabListener(calendarFragment));
+        Tab2.setTabListener(new TabListener(friendsFragment));
+        Tab3.setTabListener(new TabListener(travelFragment));
 
         // Add tabs to actionbar
         actionBar.addTab(Tab1);
         actionBar.addTab(Tab2);
         actionBar.addTab(Tab3);
+
+        DataManager.getInstance().init(this, calendarFragment, friendsFragment, travelFragment);
 
     }
 

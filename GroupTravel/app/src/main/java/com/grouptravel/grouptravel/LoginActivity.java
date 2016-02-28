@@ -106,6 +106,7 @@ public class LoginActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("userId", Profile.getCurrentProfile().getId());
                         goToMain();
                     }
                 });

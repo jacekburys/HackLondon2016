@@ -34,10 +34,12 @@ public class FriendsFragment extends Fragment {
 
     ArrayList<Friend> friendsList;
     View rootView;
+    TextView textView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.list, container, false);
+        textView = (TextView)rootView.findViewById(R.id.textIntersection);
         getFriends();
         return rootView;
     }
@@ -76,6 +78,7 @@ public class FriendsFragment extends Fragment {
                             }
 
                             setAdapter(friends);
+                            friendsList = friends;
 
                         } catch(JSONException e){
 
@@ -87,6 +90,19 @@ public class FriendsFragment extends Fragment {
 
     }
 
+    public void updateIntersection(String intersection) {
+        final String temp = intersection;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(temp);
+            }
+        });
+    }
+
+    public ArrayList<Friend> getFriendsList() {
+        return friendsList;
+    }
 
 
     private class MyCustomAdapter extends ArrayAdapter<Friend> {
@@ -130,6 +146,7 @@ public class FriendsFragment extends Fragment {
                                         " is " + cb.isChecked(),
                                 Toast.LENGTH_LONG).show();
                         friend.setSelected(cb.isChecked());
+                        DataManager.getInstance().getIntersection();
                     }
                 });
             }
@@ -146,6 +163,9 @@ public class FriendsFragment extends Fragment {
             return convertView;
 
         }
+
+
+
 
     }
 }
