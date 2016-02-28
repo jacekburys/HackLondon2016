@@ -137,11 +137,11 @@ public class FriendsFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Friend country = friendsList.get(position);
-            holder.code.setText(" (" +  country.getId() + ")");
-            holder.name.setText(country.getName());
-            holder.name.setChecked(country.isSelected());
-            holder.name.setTag(country);
+            Friend friend = friendsList.get(position);
+            holder.code.setText(" (" +  friend.getId() + ")");
+            holder.name.setText(friend.getName());
+            holder.name.setChecked(friend.isSelected());
+            holder.name.setTag(friend);
 
             return convertView;
 
