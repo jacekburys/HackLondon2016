@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Set;
 
 
@@ -41,7 +42,15 @@ public class DataManager {
         return instance;
     }
 
+    private HashMap<String, String> countryMap;
+
     private DataManager() {
+        countryMap = new HashMap<>();
+        countryMap.put("RO", "Romania");
+        countryMap.put("PL", "Poland");
+        countryMap.put("US", "United States");
+        countryMap.put("GER", "Germany");
+        countryMap.put("FR", "France");
     }
 
     public void init(Context context, CalendarFragment calendarFragment,
@@ -268,42 +277,24 @@ public class DataManager {
 
         StringBuilder sb = new StringBuilder();
 
-        ArrayList<Friend> friends = friendsFragment.getFriendsList();
-
-        sb.append("[");
-
-        sb.append("\"" + Profile.getCurrentProfile().getId() + "\"");
-        if(!friends.isEmpty()){
-            sb.append(",");
-        }
-
-        for(int i=0; i<friends.size(); i++) {
-            sb.append("\"" + friends.get(i).getId() + "\"");
-            if(i < friends.size() - 1){
-                sb.append(",");
-            }
-        }
-        sb.append("]");
-
-
-        final String URL = "https://group-travel.herokuapp.com/api/get/intersection/" + sb.toString();
+        final String URL = "https://group-travel.herokuapp.com/api/get/price";
         // pass second argument as "null" for GET requests
         JsonObjectRequest req = new JsonObjectRequest(URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("update", "success");
-                        Log.d("intersection", response.toString());
-                        String start = "";
-                        String end = "";
+                        Log.d("price", response.toString());
+                        String min = "";
+                        String country = "";
                         try{
-                            start = response.getString("start");
-                            end = response.getString("end");
+                            min = response.getString("min");
+                            country = response.getString("country");
                         }catch(Exception e){
 
                         }
 
-                        friendsFragment.updateIntersection(start + " - " + end);
+                        travelFragment.updateFlight(countryMap.get(country) + " - " + min + " GBP");
                     }
                 }, new Response.ErrorListener() {
             @Override

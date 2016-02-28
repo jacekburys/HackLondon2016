@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class TravelFragment extends Fragment {
 
     private Button button;
+    private TextView textView;
     private CallbackManager callbackManager;
     private GameRequestDialog requestDialog;
 
@@ -40,11 +41,12 @@ public class TravelFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.travel, container, false);
 
         button = (Button)rootView.findViewById(R.id.travelButton);
+        textView= (TextView)rootView.findViewById(R.id.travelTextView);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendNotification();
+                getFlight();
             }
         });
 
@@ -52,8 +54,18 @@ public class TravelFragment extends Fragment {
         return rootView;
     }
 
-    private void sendNotification() {
+    public void updateFlight(String s){
+        final String temp = s;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(temp);
+            }
+        });
+    }
 
+    private void getFlight() {
+        DataManager.getInstance().getFlight();
     }
 
 }
